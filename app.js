@@ -265,8 +265,6 @@ function receivedMessage(event) {
 
 function processMessage(messageText, senderID, userProfile, messageAttachments) {
   if(messageText) {
-    console.log(messageText);
-    sendTextMessage(senderID, messageText);
     var request = apiai.textRequest(messageText, {
       sessionId: senderID.toString() // use any arbitrary id
     });
