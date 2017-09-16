@@ -17,7 +17,7 @@ const
   express = require('express'),
   https = require('https'),
   request = require('request'),
-  fse = require('fs-extra');
+  apiaiApp = require('apiai')(d12606fdc0294197b2fb80b3d90b095b);
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -308,11 +308,6 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       return;
     }
 
-    if(messageText.toLowerCase() === "count") {
-      count(senderID);
-      return;
-    }
-
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
     // the text we received.
@@ -394,14 +389,6 @@ function sendynm(senderID, json) {
   };
 
   callSendAPI(messageData);
-}
-
-function count(senderID) {
-  fse.ensureFileSync('/count/' + senderID + '.hmbc', '{\ncount: 0\n}');
-  var num = fse.readJSONSync('/count/' + senderID + '.hmbc');
-  num.count++;
-  sendTextMessage(senderID, num.count);
-  fse.writeJSONSync('/count/' + senderID + '.hmbc', num);
 }
 
 /*
