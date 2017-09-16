@@ -265,41 +265,22 @@ function receivedMessage(event) {
 
 function processMessage(messageText, senderID, userProfile, messageAttachments) {
   if(messageText) {
-    var apiai = apiaiApp.textRequest(text, {
+    var conv = apiai.textRequest(text, {
       sessionId: '' + senderID // use any arbitrary id
     });
 
-    apiai.on('response', (response) => {
+    conv.on('response', (response) => {
       // Got a response from api.ai. Let's POST to Facebook Messenger
       let aiText = response.result.fulfillment.speech;
       sendTextMessage(senderID, aiText);
     });
 
-    apiai.on('error', (error) => {
+    conv.on('error', (error) => {
       console.log(error);
     });
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
-}
-
-function sendynm(senderID, json) {
-  if(!json.forced) sendTextMessage(senderID, json.answer);
-  var messageData = {
-    recipient: {
-      id: senderID
-    },
-    message: {
-      attachment: {
-        type: "image",
-        payload: {
-          url: json.image
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
 }
 
 /*
