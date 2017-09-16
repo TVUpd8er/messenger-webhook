@@ -312,7 +312,7 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 */
 
 function subscribe(senderID, show) {
-  request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show_name)}, function(e, r, body) {
+  request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show)}, function(e, r, body) {
     if(!e) {
       sendTextMessage(senderID, 'Subscribed to ' + body.name);
       firebase_subscribe(senderID,show);
