@@ -314,6 +314,7 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 function subscribe(senderID, show) {
   // TODO
   sendTextMessage(senderID, 'Subscribing to \'' + show + '\'');
+  firebase_subscribe(senderID,show);
 }
 
 /* Unsubscribes from a show
@@ -322,6 +323,7 @@ function subscribe(senderID, show) {
 function unsubscribe(senderID, show) {
   // TODO
   sendTextMessage(senderID, 'Unsubscribing from \'' + show + '\'');
+  firebase_unsubscribe(senderID,show);
 }
 
 function userExistsCallback(userId, exists) {
@@ -342,6 +344,14 @@ function firebase_init_user(userId) {
     var exists = (snapshot.val() !== null);
     userExistsCallback(userId, exists);
   });
+}
+
+function firebase_subscribe(userId, show) {
+	db.ref().child(userId).child('subs').push(show);
+}
+
+function firebase_unsubscribe(userId, show) {
+	db.ref().child(userId).child(show).remove();
 }
 
 /*
