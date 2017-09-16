@@ -265,7 +265,7 @@ function receivedMessage(event) {
 
 function processMessage(messageText, senderID, userProfile, messageAttachments) {
   if(messageText) {
-    var conv = apiai.textRequest(text, {
+    var conv = apiai.textRequest(messageText, {
       sessionId: '' + senderID // use any arbitrary id
     });
 
