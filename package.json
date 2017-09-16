@@ -1,7 +1,7 @@
 {
   "name": "messenger-bot",
   "version": "1.0.0",
-  "description": "Messenger Platform QuickStart Demo",
+  "description": "TV Upd8er",
   "main": "index.js",
   "scripts": {
     "start": "node bot.js"
@@ -17,7 +17,7 @@
   ],
   "author": "TVUpd8er",
   "license": "MIT",
-  "homepage": "https://developers.facebook.com/docs/messenger-platform/guides/quick-start",
+  "homepage": "tvupd8er.justinpu.ca",
   "dependencies": {
     "request": "^2.72.0",
     "express": "*",
