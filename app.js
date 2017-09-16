@@ -39,6 +39,8 @@ var fbconfig = {
 firebase.initializeApp(fbconfig);
 var db = firebase.database();
 
+var show_callback = null;
+
 /*
  * Be sure to setup your config values before running this code. You can
  * set them using environment variables or modifying the config file in /config.
@@ -330,14 +332,13 @@ function get_show_by_name (name, fn) {
 }
 
 function subscribe(senderID, name) {
-  var show = null;
   get_show_by_name(name, function(thing) {
-      show = thing;  
+      show_callback = thing;  
   });
   
-  if(show != null) {
-      sendTextMessage(senderID, 'You\'ve been subscribed to ' + show.name + '. Go nuts!!');
-      firebase_subscribe(senderID,show.id);
+  if(show_callback != null) {
+      sendTextMessage(senderID, 'You\'ve been subscribed to ' + show_callback.name + '. Go nuts!!');
+      firebase_subscribe(senderID,show_callback.id);
   }
   else {
       console.log('Access to TVMaze API failed');
