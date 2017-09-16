@@ -87,7 +87,6 @@ app.get('/webhook', function(req, res) {
   }
 });
 
-
 /*
  * All callbacks for Messenger are POST-ed. They will be sent to the same
  * webhook. Be sure to subscribe your app to your page to receive callbacks
@@ -235,13 +234,12 @@ function receivedMessage(event) {
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
+	
+  firebase_init_user(senderID);
 
   console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
-	
-  // thing TEST
-  firebase_init_user(senderID);
 
   var isEcho = message.is_echo;
   var messageId = message.mid;
@@ -326,14 +324,24 @@ function unsubscribe(senderID, show) {
   sendTextMessage(senderID, 'Unsubscribing from \'' + show + '\'');
 }
 
-function firebase_init_user(senderID){
-	var db_data = {
-		id: senderID,
+function userExistsCallback(userId, exists) {
+  if (!exists) {
+    var db_data = {
+		id: userId,
 		subs: [],
 		want_news: []
 	};
 	
-	db.ref().child(senderID).set(db_data);
+	db.ref().child(userId).set(db_data);
+  }
+}
+
+// Tests to see if /users/<userId> has any data. 
+function firebase_init_user(userId) {
+  db.ref().child(userId).once('value', function(snapshot) {
+    var exists = (snapshot.val() !== null);
+    userExistsCallback(userId, exists);
+  });
 }
 
 /*
