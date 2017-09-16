@@ -311,14 +311,25 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 /* Subscribes to a show
 */
 
+function get_show_info (id) {
+  request({json: true, url: 'http://api.tvmaze.com/shows/' + id}, function(e, r, body) {
+    if(!e && body != null) {
+		return body;
+    } else {
+      console.log('Access to TVMaze API failed');
+      return null;
+    }
+  });
+}
+
 function subscribe(senderID, show) {
   request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show)}, function(e, r, body) {
     if(!e && body != null) {
-      sendTextMessage(senderID, 'Subscribed to ' + body.name);
-      firebase_subscribe(senderID,show);
+      sendTextMessage(senderID, 'Yay! You\'ve been subscribed to ' + body.name + '!!');
+      firebase_subscribe(senderID,body.id);
     } else {
       console.log('Access to TVMaze API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show.');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
     }
   });
 }
@@ -326,21 +337,16 @@ function subscribe(senderID, show) {
 /* Unsubscribes from a show
 */
 
-function unsubscribe(senderID, show) {
+function unsubscribe(senderID, showId) {
   // TODO
-  sendTextMessage(senderID, 'Unsubscribing from \'' + show + '\'');
-  firebase_unsubscribe(senderID,show);
+  var show = get_show_info(showId);
+  sendTextMessage(senderID, 'Unsubscribing from \'' + show.name + '\'');
+  firebase_unsubscribe(senderID,showId);
 }
 
 function userExistsCallback(userId, exists) {
   if (!exists) {
-    var db_data = {
-		id: userId,
-		subs: [],
-		want_news: []
-	};
-
-	db.ref().child(userId).set(db_data);
+	   db.ref().child(userId).set(userId);
   }
 }
 
@@ -352,12 +358,16 @@ function firebase_init_user(userId) {
   });
 }
 
-function firebase_subscribe(userId, show) {
-	db.ref().child(userId).child('subs').child(show).push(1);//change one to whether they want notifications for that show
+function firebase_subscribe(userId, showId) {
+	db.ref().child(userId).child('subs').child(showId).push(true);//change true to whether they want notifications for that show
 }
 
-function firebase_unsubscribe(userId, show) {
-	db.ref().child(userId).child('subs').child(show).remove();
+function firebase_unsubscribe(userId, showId) {
+	db.ref().child(userId).child('subs').child(showId).remove();
+}
+
+function firebase_get_notifications(userId, showId, notifications) {
+    db.ref().child(userId).child('subs').child(showId).update(notifications);
 }
 
 /*
