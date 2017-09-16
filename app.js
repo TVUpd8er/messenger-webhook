@@ -273,8 +273,14 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       // Got a response from api.ai. Let's POST to Facebook Messenger
       let aiText = response.result.fulfillment.speech;
       console.log('Received response from api.ai: \'' + aiText + '\'');
-      if(aiText.length > 0 && aiText.charAt(0) === '~') sendTextMessage(senderID, 'Subscribing to \'' + aiText.substr(1) + '\'');
-      else sendTextMessage(senderID, aiText);
+      if(ai.length < 0) console.log('Received empty string back!');
+      if(aiText.charAt(0) == '+') {
+        subscribe(senderID, aiText);
+      } else if(aiText.charAt(0) == '+') {
+        subscribe(senderID, aiText);
+      } else if(aiText.charAt(0) == '-') {
+        unsubscribe(senderID, aiText);
+      } else sendTextMessage(senderID, aiText);
     });
 
     request.on('error', (error) => {
@@ -286,6 +292,24 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
     sendTextMessage(senderID, "Message with attachment received");
   }
 }
+
+/* Subscribes to a show
+*/
+
+function subscribe(senderID, show) {
+  // TODO
+  sendTextMessage(senderID, 'Subscribing to \'' + aiText.substr(1) + '\'');
+}
+
+/* Unsubscribes from a show
+*/
+
+function unsubscribe(senderID, show) {
+  // TODO
+  sendTextMessage(senderID, 'Unsubscribing from \'' + aiText.substr(1) + '\'');
+}
+
+
 
 /*
  * Delivery Confirmation Event
