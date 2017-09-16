@@ -311,30 +311,29 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 /* Subscribes to a show
 */
 
-function get_show_by_id (id) {
+function get_show_by_id (id, fn) {
   request({json: true, url: 'http://api.tvmaze.com/shows/' + id}, function(e, r, body) {
-    if(!e && body != null) {
-		return body;
-    } else {
+    fn(body);
+    if(!(!e && body != null)) {
       console.log('Access to TVMaze API failed');
-      return null;
     }
   });
 }
 
-function get_show_by_name (name) {
-    request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(name)}, function(e, r, body) {
-    if(!e && body != null) {
-      return body;
-    } else {
+function get_show_by_name (name, fn) {
+  request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(name)}, function(e, r, body) {
+    fn(body);
+    if(!(!e && body != null)) {
       console.log('Access to TVMaze API failed');
-      return null;
     }
   });
 }
 
 function subscribe(senderID, name) {
-  var show = get_show_by_name(name);
+  var show = null;
+  get_show_by_name(name, fn(thing) {
+      show = thing;  
+  });
   
   if(show != null) {
       sendTextMessage(senderID, 'You\'ve been subscribed to ' + show.name + '. Go nuts!!');
