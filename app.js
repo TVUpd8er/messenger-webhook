@@ -265,108 +265,19 @@ function receivedMessage(event) {
 
 function processMessage(messageText, senderID, userProfile, messageAttachments) {
   if(messageText) {
-    if(JSON.stringify(userProfile) !== '{}' && messageText === userProfile.first_name) {
-      sendTextMessage(senderID, userProfile.last_name);
-      return;
-    }
+    var apiai = apiaiApp.textRequest(text, {
+      sessionId: '' + senderID // use any arbitrary id
+    });
 
-    if(messageText.toLowerCase().startsWith('yes')) {
-      request({json: true, url: 'https://yesno.wtf/api/?force=yes'}, function(e, r, body) {
-        if(!e) {
-          sendynm(senderID, body);
-        } else {
-          console.log('Access to user yesno.wtf API failed');
-        }
-      });
-      return;
-    } else if(messageText.toLowerCase().startsWith('no')) {
-      request({json: true, url: 'https://yesno.wtf/api/?force=no'}, function(e, r, body) {
-        if(!e) {
-          sendynm(senderID, body);
-        } else {
-          console.log('Access to user yesno.wtf API failed');
-        }
-      });
-      return;
-    } else if(messageText.toLowerCase().startsWith('maybe')) {
-      request({json: true, url: 'https://yesno.wtf/api/?force=maybe'}, function(e, r, body) {
-        if(!e) {
-          sendynm(senderID, body);
-        } else {
-          console.log('Access to user yesno.wtf API failed');
-        }
-      });
-      return;
-    } else if(messageText.endsWith("?")) {
-      request({json: true, url: 'https://yesno.wtf/api/'}, function(e, r, body) {
-        if(!e) {
-          sendynm(senderID, body);
-        } else {
-          console.log('Access to user yesno.wtf API failed');
-        }
-      });
-      return;
-    }
+    apiai.on('response', (response) => {
+      // Got a response from api.ai. Let's POST to Facebook Messenger
+      let aiText = response.result.fulfillment.speech;
+      sendTextMessage(senderID, aiText);
+    });
 
-    // If we receive a text message, check to see if it matches any special
-    // keywords and send back the corresponding example. Otherwise, just echo
-    // the text we received.
-    switch (messageText) {
-      case 'image':
-        sendImageMessage(senderID);
-        break;
-
-      case 'gif':
-        sendGifMessage(senderID);
-        break;
-
-      case 'audio':
-        sendAudioMessage(senderID);
-        break;
-
-      case 'video':
-        sendVideoMessage(senderID);
-        break;
-
-      case 'file':
-        sendFileMessage(senderID);
-        break;
-
-      case 'button':
-        sendButtonMessage(senderID);
-        break;
-
-      case 'generic':
-        sendGenericMessage(senderID);
-        break;
-
-      case 'receipt':
-        sendReceiptMessage(senderID);
-        break;
-
-      case 'quick reply':
-        sendQuickReply(senderID);
-        break;
-
-      case 'read receipt':
-        sendReadReceipt(senderID);
-        break;
-
-      case 'typing on':
-        sendTypingOn(senderID);
-        break;
-
-      case 'typing off':
-        sendTypingOff(senderID);
-        break;
-
-      case 'account linking':
-        sendAccountLinking(senderID);
-        break;
-
-      default:
-        sendTextMessage(senderID, messageText);
-    }
+    apiai.on('error', (error) => {
+      console.log(error);
+    });
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
