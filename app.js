@@ -27,7 +27,7 @@ app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 
 // Initialize Firebase
-var config = {
+var fbconfig = {
     apiKey: "AIzaSyDgjHO606F-nd6TvmsRwlWPB7_zeVYBN_Y",
     authDomain: "tv-upd8er-329cf.firebaseapp.com",
     databaseURL: "https://tv-upd8er-329cf.firebaseio.com",
@@ -36,7 +36,7 @@ var config = {
     messagingSenderId: "1089291010810"
 };
 
-firebase.initializeApp(config);
+firebase.initializeApp(fbconfig);
 var db = firebase.database();
 
 /*
