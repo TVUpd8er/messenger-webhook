@@ -336,7 +336,7 @@ function get_show_by_name (name) {
 function subscribe(senderID, name) {
   var show = get_show_by_name(name);
   
-  if(show == null) {
+  if(show != null) {
       sendTextMessage(senderID, 'You\'ve been subscribed to ' + show.name + '. Go nuts!!');
       firebase_subscribe(senderID,show.id);
   }
@@ -352,8 +352,13 @@ function subscribe(senderID, name) {
 function unsubscribe(senderID, name) {
   // TODO
   var show = get_show_by_name(name);
-  sendTextMessage(senderID, 'Unsubscribing from \'' + name + '\'');
-  firebase_unsubscribe(senderID,show.id);
+  if (show != null) {
+      sendTextMessage(senderID, 'Unsubscribing from \'' + name + '\'');
+      firebase_unsubscribe(senderID,show.id);
+  }
+  else{
+    sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :('); 
+  }
 }
 
 function userExistsCallback(userId, exists) {
