@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vernon99/messenger-quick-start.git"
+    "url": "git+https://github.com/TVUpd8er/messenger-webhook.git"
   },
   "keywords": [
     "messenger",
     "bot",
     "quickstart"
   ],
-  "author": "Mikhail Larionov <mlarionov@fb.com>",
+  "author": "TVUpd8er",
   "license": "MIT",
   "homepage": "https://developers.facebook.com/docs/messenger-platform/guides/quick-start",
   "dependencies": {
