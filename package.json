@@ -1,7 +1,7 @@
 {
-  "name": "hangmanbot",
+  "name": "TV-Upd8er",
   "version": "1.0.0",
-  "description": "A messenger bot to eventually play hangman",
+  "description": "A messenger bot that sends notifications about TV shows.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,17 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fbsamples/messenger-platform-samples.git"
+    "url": "https://github.com/TVUpd8er/messenger-webhook.git"
   },
-  "author": "Facebook",
-  "license": "ISC",
+  "author": "TV-Upd8er",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.0",
     "config": "^1.20.4",
     "ejs": "^2.4.2",
     "express": "^4.13.4",
-    "request": "^2.72.0",
-    "fs-extra": "^4.0.0"
+    "request": "^2.72.0"
   },
   "engines": {
     "node": "~4.1.2"
