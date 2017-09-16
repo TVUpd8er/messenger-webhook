@@ -311,7 +311,7 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 /* Subscribes to a show
 */
 
-function get_show_info (id) {
+function get_show_by_id (id) {
   request({json: true, url: 'http://api.tvmaze.com/shows/' + id}, function(e, r, body) {
     if(!e && body != null) {
 		return body;
@@ -322,26 +322,38 @@ function get_show_info (id) {
   });
 }
 
-function subscribe(senderID, show) {
-  request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show)}, function(e, r, body) {
+function get_show_by_name (name) {
+    request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show)}, function(e, r, body) {
     if(!e && body != null) {
-      sendTextMessage(senderID, 'You\'ve been subscribed to ' + body.name + '. Go nuts!!');
-      firebase_subscribe(senderID,body.id);
+      return body;
     } else {
       console.log('Access to TVMaze API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+      return null;
     }
   });
+}
+
+function subscribe(senderID, name) {
+  var show = get_show_by_name(name);
+  
+  if(show == null) {
+      sendTextMessage(senderID, 'You\'ve been subscribed to ' + show.name + '. Go nuts!!');
+      firebase_subscribe(senderID,show.id);
+  }
+  else {
+      console.log('Access to TVMaze API failed');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+  }
 }
 
 /* Unsubscribes from a show
 */
 
-function unsubscribe(senderID, showId) {
+function unsubscribe(senderID, name) {
   // TODO
-  var show = get_show_info(showId);
-  sendTextMessage(senderID, 'Unsubscribing from \'' + show.name + '\'');
-  firebase_unsubscribe(senderID,showId);
+  var show = get_show_by_name(name);
+  sendTextMessage(senderID, 'Unsubscribing from \'' + name + '\'');
+  firebase_unsubscribe(senderID,show.id);
 }
 
 function userExistsCallback(userId, exists) {
