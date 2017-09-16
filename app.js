@@ -331,7 +331,7 @@ function get_show_by_name (name, fn) {
 
 function subscribe(senderID, name) {
   var show = null;
-  get_show_by_name(name, fn(thing) {
+  get_show_by_name(name, function(thing) {
       show = thing;  
   });
   
