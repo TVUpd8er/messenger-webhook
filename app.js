@@ -333,7 +333,7 @@ function firebase_init_user(senderID){
 		want_news: []
 	};
 	
-	db.child(senderID).setValue(db_data);
+	db.ref().child(senderID).setValue(db_data);
 }
 
 /*
