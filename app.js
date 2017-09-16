@@ -347,7 +347,7 @@ function firebase_init_user(userId) {
 }
 
 function firebase_subscribe(userId, show) {
-	db.ref().child(userId).child('subs').child(show);
+	db.ref().child(userId).child('subs').child(show).push(1);//change one to whether they want notifications for that show
 }
 
 function firebase_unsubscribe(userId, show) {
