@@ -17,9 +17,10 @@ const
   express = require('express'),
   https = require('https'),
   request = require('request'),
-  apiaiApp = require('apiai')(d12606fdc0294197b2fb80b3d90b095b);
+  apiaiApp = require('apiai');
 
 var app = express();
+var apiai = apiaiApp('d12606fdc0294197b2fb80b3d90b095b');
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
