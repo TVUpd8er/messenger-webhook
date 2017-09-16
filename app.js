@@ -275,11 +275,11 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       console.log('Received response from api.ai: \'' + aiText + '\'');
       if(ai.length < 0) console.log('Received empty string back!');
       if(aiText.charAt(0) == '+') {
-        subscribe(senderID, aiText);
+        subscribe(senderID, aiText.substr(1));
       } else if(aiText.charAt(0) == '+') {
-        subscribe(senderID, aiText);
+        subscribe(senderID, aiText.substr(1));
       } else if(aiText.charAt(0) == '-') {
-        unsubscribe(senderID, aiText);
+        unsubscribe(senderID, aiText.substr(1));
       } else sendTextMessage(senderID, aiText);
     });
 
@@ -298,7 +298,7 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 
 function subscribe(senderID, show) {
   // TODO
-  sendTextMessage(senderID, 'Subscribing to \'' + aiText.substr(1) + '\'');
+  sendTextMessage(senderID, 'Subscribing to \'' + show + '\'');
 }
 
 /* Unsubscribes from a show
@@ -306,7 +306,7 @@ function subscribe(senderID, show) {
 
 function unsubscribe(senderID, show) {
   // TODO
-  sendTextMessage(senderID, 'Unsubscribing from \'' + aiText.substr(1) + '\'');
+  sendTextMessage(senderID, 'Unsubscribing from \'' + show + '\'');
 }
 
 
