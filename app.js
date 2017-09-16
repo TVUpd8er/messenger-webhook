@@ -351,7 +351,7 @@ function firebase_subscribe(userId, show) {
 }
 
 function firebase_unsubscribe(userId, show) {
-	db.ref().child(userId).child(show).remove();
+	db.ref().child(userId)..child('subs').child(show).remove();
 }
 
 /*
