@@ -273,7 +273,7 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       // Got a response from api.ai. Let's POST to Facebook Messenger
       let aiText = response.result.fulfillment.speech;
       console.log('Received response from api.ai: \'' + aiText + '\'');
-      if(ai.length < 0) console.log('Received empty string back!');
+      if(aiText.length < 0) console.log('Received empty string back!');
       if(aiText.charAt(0) == '+') {
         subscribe(senderID, aiText.substr(1));
       } else if(aiText.charAt(0) == '+') {
