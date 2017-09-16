@@ -17,13 +17,27 @@ const
   express = require('express'),
   https = require('https'),
   request = require('request'),
-  apiai = (require('apiai'))('d12606fdc0294197b2fb80b3d90b095b');
+  apiai = (require('apiai'))('d12606fdc0294197b2fb80b3d90b095b'),
+  firebase = require('firebase');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
+
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDgjHO606F-nd6TvmsRwlWPB7_zeVYBN_Y",
+    authDomain: "tv-upd8er-329cf.firebaseapp.com",
+    databaseURL: "https://tv-upd8er-329cf.firebaseio.com",
+    projectId: "tv-upd8er-329cf",
+    storageBucket: "tv-upd8er-329cf.appspot.com",
+    messagingSenderId: "1089291010810"
+};
+
+firebase.initializeApp(config);
+var db = firebase.database();
 
 /*
  * Be sure to setup your config values before running this code. You can
@@ -225,6 +239,9 @@ function receivedMessage(event) {
   console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
+	
+  // thing TEST
+  firebase_init_user(senderID);
 
   var isEcho = message.is_echo;
   var messageId = message.mid;
@@ -309,7 +326,15 @@ function unsubscribe(senderID, show) {
   sendTextMessage(senderID, 'Unsubscribing from \'' + show + '\'');
 }
 
-
+function firebase_init_user(senderID){
+	var db_data = {
+		id: senderID,
+		subs: [],
+		want_news: []
+	};
+	
+	db.child(senderID).setValue(db_data);
+}
 
 /*
  * Delivery Confirmation Event
