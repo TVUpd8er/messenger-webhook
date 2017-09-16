@@ -325,7 +325,7 @@ function get_show_info (id) {
 function subscribe(senderID, show) {
   request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show)}, function(e, r, body) {
     if(!e && body != null) {
-      sendTextMessage(senderID, 'Yay! You\'ve been subscribed to ' + body.name + '!!');
+      sendTextMessage(senderID, 'You\'ve been subscribed to ' + body.name + '. Go nuts!!');
       firebase_subscribe(senderID,body.id);
     } else {
       console.log('Access to TVMaze API failed');
