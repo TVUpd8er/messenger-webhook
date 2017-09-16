@@ -323,7 +323,7 @@ function get_show_by_id (id) {
 }
 
 function get_show_by_name (name) {
-    request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show)}, function(e, r, body) {
+    request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(name)}, function(e, r, body) {
     if(!e && body != null) {
       return body;
     } else {
