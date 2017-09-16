@@ -266,19 +266,23 @@ function receivedMessage(event) {
 function processMessage(messageText, senderID, userProfile, messageAttachments) {
   if(messageText) {
     console.log(messageText);
-    var conv = apiai.textRequest(messageText, {
-      sessionId: '' + senderID // use any arbitrary id
+    sendTextMessage(senderID, messageText);
+    var request = apiai.textRequest(messageText, {
+      sessionId: senderID.toString() // use any arbitrary id
     });
 
-    conv.on('response', (response) => {
+    request.on('response', (response) => {
       // Got a response from api.ai. Let's POST to Facebook Messenger
       let aiText = response.result.fulfillment.speech;
+      console.log('Received response from api.ai: \' + aiText + '\'');
       sendTextMessage(senderID, aiText);
     });
 
-    conv.on('error', (error) => {
+    request.on('error', (error) => {
       console.log(error);
     });
+
+    request.end();
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
