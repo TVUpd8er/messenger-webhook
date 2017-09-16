@@ -274,7 +274,7 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
     request.on('response', (response) => {
       // Got a response from api.ai. Let's POST to Facebook Messenger
       let aiText = response.result.fulfillment.speech;
-      console.log('Received response from api.ai: \' + aiText + '\'');
+      console.log('Received response from api.ai: \'' + aiText + '\'');
       sendTextMessage(senderID, aiText);
     });
 
