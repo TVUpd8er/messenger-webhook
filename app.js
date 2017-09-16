@@ -234,7 +234,7 @@ function receivedMessage(event) {
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
   var message = event.message;
-	
+
   firebase_init_user(senderID);
 
   console.log("Received message for user %d and page %d at %d with message:",
@@ -312,9 +312,15 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 */
 
 function subscribe(senderID, show) {
-  // TODO
-  sendTextMessage(senderID, 'Subscribing to \'' + show + '\'');
-  firebase_subscribe(senderID,show);
+  request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(show_name)}, function(e, r, body) {
+    if(!e) {
+      sendTextMessage(senderID, 'Subscribed to ' + body.name);
+      firebase_subscribe(senderID,show);
+    } else {
+      console.log('Access to TVMaze API failed');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show.');
+    }
+  });
 }
 
 /* Unsubscribes from a show
@@ -333,12 +339,12 @@ function userExistsCallback(userId, exists) {
 		subs: [],
 		want_news: []
 	};
-	
+
 	db.ref().child(userId).set(db_data);
   }
 }
 
-// Tests to see if /users/<userId> has any data. 
+// Tests to see if /users/<userId> has any data.
 function firebase_init_user(userId) {
   db.ref().child(userId).once('value', function(snapshot) {
     var exists = (snapshot.val() !== null);
