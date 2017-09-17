@@ -404,8 +404,8 @@ function notifications () {
           });
 
         })
-        subscribe(childKey, 'pingu');
       });
+      subscribe(childKey, 'pingu');
     });
   });
 }
