@@ -39,8 +39,6 @@ var fbconfig = {
 firebase.initializeApp(fbconfig);
 var db = firebase.database();
 
-var show_callback = null;
-
 /*
  * Be sure to setup your config values before running this code. You can
  * set them using environment variables or modifying the config file in /config.
@@ -313,52 +311,50 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 /* Subscribes to a show
 */
 
-function get_show_by_id (id, fn) {
+function getShowByIDCallback(id, fn) {
   request({json: true, url: 'http://api.tvmaze.com/shows/' + id}, function(e, r, body) {
-    fn(body);
-    if(!(!e && body != null)) {
+    if(!e && body != null) {
+      fn(body);
+    } else {
       console.log('Access to TVMaze API failed');
     }
   });
 }
 
-function get_show_by_name (name, fn) {
+function getShowByNameCallback(name, fn) {
   request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(name)}, function(e, r, body) {
-    fn(body);
-    if(!(!e && body != null)) {
+    if(!e && body != null) {
+      fn(body);
+    } else {
       console.log('Access to TVMaze API failed');
     }
   });
 }
 
 function subscribe(senderID, name) {
-  get_show_by_name(name, function(thing) {
-      show_callback = thing;  
+  getShowByNameCallback(name, function(show_callback) {
+    if(show_callback != null) {
+        sendTextMessage(senderID, 'You\'ve been subscribed to ' + show_callback.name + '. Go nuts!!');
+        firebase_subscribe(senderID, show_callback.id);
+    } else {
+        console.log('Access to TVMaze API failed');
+        sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+    }
   });
-  
-  if(show_callback != null) {
-      sendTextMessage(senderID, 'You\'ve been subscribed to ' + show_callback.name + '. Go nuts!!');
-      firebase_subscribe(senderID,show_callback.id);
-  }
-  else {
-      console.log('Access to TVMaze API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
-  }
 }
 
 /* Unsubscribes from a show
 */
 
 function unsubscribe(senderID, name) {
-  // TODO
-  var show = get_show_by_name(name);
-  if (show != null) {
-      sendTextMessage(senderID, 'Unsubscribing from \'' + name + '\'');
-      firebase_unsubscribe(senderID,show.id);
-  }
-  else{
-    sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :('); 
-  }
+  getShowByNameCallback(name, function(show_callback) {
+    if (show_callback != null) {
+        sendTextMessage(senderID, 'Unsubscribing from \'' + name + '\'');
+        firebase_unsubscribe(senderID, show_callback.id);
+    } else {
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+    }
+  });
 }
 
 function userExistsCallback(userId, exists) {
