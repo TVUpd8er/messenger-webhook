@@ -417,8 +417,6 @@ function recommendations(senderID, name) {
 
       request({json: true, url: url}, function(e, r, body) {
         if(!e) {
-          sendTextMessage(senderID, 'You like ' + show_callback.name + '? Hope you like these ones ✨');
-
           var lst = new Array();
 
           body.Similar.Results.forEach(function(element) {
@@ -430,8 +428,12 @@ function recommendations(senderID, name) {
           for (var i = 0; i < Math.min (5, lst.length); i++) {
             msg += lst[i] += (i == (Math.min (5, lst.length) - 2) ? ' and ' : (i == (Math.min (5, lst.length) - 1) ? '' : ', '));
           }
-
-          sendTextMessage(senderID,msg);
+          var msg2 = lst.length == 0 ? 'There aren\'t any shows like ' + show_callback.name : 'You like ' + show_callback.name + '? Hope you like these ones ✨';
+          sendTextMessage(senderID, msg2);
+          
+          if (lst.length != 0) {
+            sendTextMessage(senderID,msg);
+          }
         } else {
           console.log('Access to TasteDive failed');
           console.log('Access to casts failed.');
