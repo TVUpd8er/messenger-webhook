@@ -336,7 +336,7 @@ function recommendations(senderID, name) {
       
       request({json: true, url: url}, function(e, r, body) {
         if(!e) {
-          sendTextMessage(senderID, 'You like ' + show_callback.name + '? Here\'s some shows just like it:');
+          sendTextMessage(senderID, 'You like ' + show_callback.name + '? Here\'s some shows just like it!');
           
           var lst = new Array();
           
@@ -398,7 +398,7 @@ function summary(senderID, name) {
     if (show_callback != null) {
         var summ = sanitizeHtml(show_callback.summary, {allowedTags: [], allowedAttributes: []});
         summ = summ.replace(/&quot;/g, '\"');
-        sendTextMessage(senderID, 'So you wanna know about \'' + show_callback.name + '\' eh?');
+        sendTextMessage(senderID, 'I should warn you about spoilers.');
         sendTextMessage(senderID, summ);
     } else {
       console.log('Access to TVMaze API failed');
