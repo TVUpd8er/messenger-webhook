@@ -381,7 +381,7 @@ function cast(senderID, name) {
             list.append(element.person.name);
           });
           
-          for (var i = 0; i < 5; i++) {
+          for (var i = 0; i < Math.min (5, list.length); i++) {
             sendTextMessage(senderID, list[i]);
           }
         } else {
