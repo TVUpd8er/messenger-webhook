@@ -20,8 +20,7 @@ const
   apiai = (require('apiai'))('d12606fdc0294197b2fb80b3d90b095b'),
   firebase = require('firebase'),
   sanitizeHtml = require('sanitize-html'),
-  moment = require('moment'),
-  idk = require('make-runnable');
+  moment = require('moment');
 
 
 var app = express();
