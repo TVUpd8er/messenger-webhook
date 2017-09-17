@@ -355,7 +355,7 @@ function notifications () {
                 
                 for (var x = 0; x < send_notifications_at.length; x++) {
                   if (moment ().isSameOrAfter (send_notifications_at[x])) {
-                    if (last_notification.isBefore(send_notifications_at[x])) {
+                    if (moment(last_notification, 'MMMM Do YYYY, h:mm:ss a').isBefore(send_notifications_at[x])) {
                         // last notification was sent before the time to send it, you should prolly send one
                         getShowByNameCallback(name, function(show_callback) {
                           if (show_callback != null) {
