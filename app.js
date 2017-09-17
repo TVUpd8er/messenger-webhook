@@ -313,13 +313,6 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
   }
 }
 
-function shuffle(a) {
-    for (let i = a.length; i; i--) {
-        let j = Math.floor(Math.random() * i);
-        [a[i - 1], a[j]] = [a[j], a[i - 1]];
-    }
-}
-
 /* Subscribes to a show
 */
 
@@ -350,9 +343,7 @@ function recommendations(senderID, name) {
           body.forEach(function(element) {
             lst.push(element.Results.Name);
           });
-          
-          shuffle(lst);
-          
+                    
           var msg = '';
           
           for (var i = 0; i < Math.min (5, lst.length); i++) {
