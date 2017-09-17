@@ -375,10 +375,15 @@ function cast(senderID, name) {
       request({json: true, url: 'http://api.tvmaze.com/shows/' + show_callback.id + '/cast'}, function(e, r, body) {
         if(!e) {
           sendTextMessage(senderID, 'Here are the main cast members:')
+          var lst = new Array();
           
           body.forEach(function(element) {
-            sendTextMessage(senderID,element.person.name);
+            list.append(element.person.name);
           });
+          
+          for (var i = 0; i < 5; i++) {
+            sendTextMessage(senderID, list[i]);
+          }
         } else {
           console.log('Access to TVMaze Cast API failed');
           console.log('Access to casts failed.');
