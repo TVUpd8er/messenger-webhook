@@ -309,23 +309,15 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
 /* Subscribes to a show
 */
 
-function getShowByIDCallback(id, fn) {
+function getShowByIDCallback(id, callback) {
   request({json: true, url: 'http://api.tvmaze.com/shows/' + id}, function(e, r, body) {
-    if(!e && body != null) {
-      fn(body);
-    } else {
-      console.log('Access to TVMaze API failed');
-    }
+    callback(body);
   });
 }
 
-function getShowByNameCallback(name, fn) {
+function getShowByNameCallback(name, callback) {
   request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(name)}, function(e, r, body) {
-    if(!e && body != null) {
-      fn(body);
-    } else {
-      console.log('Access to TVMaze API failed');
-    }
+    callback(body);
   });
 }
 
@@ -350,6 +342,7 @@ function unsubscribe(senderID, name) {
         sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'');
         firebase_unsubscribe(senderID, show_callback.id);
     } else {
+      console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
     }
   });
