@@ -303,9 +303,9 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       } else if(aiText.charAt(0) == '~') {
         recommendations(senderID,aiText.substr(1));
       }else sendTextMessage(senderID, aiText);
-      
-      notifications();
     });
+    
+    notifications();
 
     request.on('error', (error) => {
       console.log(error);
@@ -472,7 +472,7 @@ function nextEpisode(id, callback) {
     if(!e && body != null) {
       var next = null;
       body.forEach(function(element) {
-        console.log(moment().format('YYYY-MM-DD') + ' ' + element.airdate);
+        //console.log(moment().format('YYYY-MM-DD') + ' ' + element.airdate);
         if(next === null) {
           if(element.airdate.length != 0 && element.airtime.length != 0 && moment().isSameOrBefore(element.airdate + ' ' + element.airtime) ||
               element.airdate.length === 0)
