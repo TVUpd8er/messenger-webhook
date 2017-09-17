@@ -384,7 +384,7 @@ function cast(senderID, name) {
           var msg = '';
           
           for (var i = 0; i < Math.min (5, lst.length); i++) {
-            msg += lst[i] + (i == (Math.min (5, lst.length) - 1) ? ' and ' : ', ');
+            msg += lst[i] += (i == (Math.min (5, lst.length) - 2) ? ' and ' : ', ');
           }
           
           sendTextMessage(senderID,msg);
