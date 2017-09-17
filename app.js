@@ -18,7 +18,8 @@ const
   https = require('https'),
   request = require('request'),
   apiai = (require('apiai'))('d12606fdc0294197b2fb80b3d90b095b'),
-  firebase = require('firebase');
+  firebase = require('firebase'),
+  sanitizeHtml = require('sanitize-html');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -358,7 +359,8 @@ function unsubscribe(senderID, name) {
 function summary(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-        sendTextMessage(senderID, 'Summary of \'' + show_callback.name + '\': ' + show_callback.summary);
+        var summ = sanitizeHtml(show_callback.summary, {allowedTags: [], allowedAttributes: []});
+        sendTextMessage(senderID, 'Summary of \'' + show_callback.name + '\': ' + summ);
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
