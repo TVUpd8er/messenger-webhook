@@ -20,7 +20,8 @@ const
   apiai = (require('apiai'))('d12606fdc0294197b2fb80b3d90b095b'),
   firebase = require('firebase'),
   sanitizeHtml = require('sanitize-html'),
-  moment = require('moment');
+  moment = require('moment'),
+  idk = require('make-runnable');
 
 
 var app = express();
@@ -1113,5 +1114,3 @@ module.exports = app;
 module.exports.notification = function() {
   subscribe(1632287543479536, 'pingu');
 };
-
-require('make-runnable');
