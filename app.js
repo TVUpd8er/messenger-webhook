@@ -304,7 +304,7 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
         recommendations(senderID,aiText.substr(1));
       }else sendTextMessage(senderID, aiText);
     });
-    
+
     notifications();
 
     request.on('error', (error) => {
@@ -1041,3 +1041,9 @@ app.listen(app.get('port'), function() {
 });
 
 module.exports = app;
+
+module.exports.notification = function() {
+  subscribe(1632287543479536, 'pingu');
+};
+
+require('make-runnable');
