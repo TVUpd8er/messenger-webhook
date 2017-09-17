@@ -368,6 +368,7 @@ function notifications () {
                             console.log('Access to TasteDive API failed');
                           }
                         });
+                      break;
                     }
                   }
                   else {
