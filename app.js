@@ -1045,5 +1045,3 @@ module.exports = app;
 module.exports.notification = function() {
   subscribe(1632287543479536, 'pingu');
 };
-
-require('make-runnable');
