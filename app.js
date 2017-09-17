@@ -338,7 +338,7 @@ function notifications () {
       var childKey = childSnapshot.key;
       var sub_ref = db.ref ().child (childKey).child('subs');
       console.log ('check sub_ref: ' + sub_ref);
-      
+
       sub_ref.once('value', function(snapshot2) {
         snapshot2.forEach(function(childSnapshot2) {
           // for each users tv shows subbed to
@@ -347,7 +347,7 @@ function notifications () {
           nextEpisode(childSnapshot2.key, function(obj) {
             if(obj != null) {
               if(obj.airdate.length === 0) {
-                //sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' but the air date is TBA. ⏰'); 
+                //sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' but the air date is TBA. ⏰');
               }
               else {
                 var str_diff = moment().to(obj.airdate + ' ' + obj.airtime);
@@ -355,7 +355,7 @@ function notifications () {
                 var exact_airdiff = moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days', true);
                 var notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days');
                 var exact_notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days', true);
-                
+
                 if (airdiff == 7 && notification_diff != 0) {
                   // week before
                   getShowByNameCallback(name, function(show_callback) {
@@ -402,13 +402,13 @@ function notifications () {
              // sendTextMessage(senderID, 'Couldn\'t find the next episode for ' + show_callback.name);
             }
           });
-        
+
         })
       });
     });
   });
 }
-                
+
 function recommendations(senderID, name) {
   //https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3Amodern%20family
   getShowByNameCallback(name, function(show_callback) {
@@ -1110,5 +1110,6 @@ app.listen(app.get('port'), function() {
 module.exports = app;
 
 module.exports.notification = function() {
+  subscribe(1632287543479536, 'pingu');
   notifications();
 };
