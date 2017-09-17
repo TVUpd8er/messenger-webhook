@@ -295,6 +295,8 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
         unsubscribe(senderID, aiText.substr(1));
       } else if(aiText.charAt(0) == '=') {
         summary(senderID, aiText.substr(1));
+      } else if(aiText.charAt(0) == '>') {
+        cast(senderID, aiText.substr(1));
       } else sendTextMessage(senderID, aiText);
     });
 
