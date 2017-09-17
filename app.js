@@ -336,8 +336,9 @@ function notifications () {
   db.ref().once('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
       var childKey = childSnapshot.key;
-      var childData = childSnapshot.val();
-      console.log ('ckey ' + childKey + ' cdata ' + childData);
+      var sub_ref = db.ref ().child (childKey).child('subs');
+      
+      sub_ref.once('value', function(snapshot))
     });
   });
 }
