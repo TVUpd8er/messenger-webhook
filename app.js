@@ -346,7 +346,7 @@ function notifications () {
           // for each users tv shows subbed to
           // Next episode
           var last_notification = childSnapshot2.val();
-          nextEpisode(show_callback.id, function(obj) {
+          nextEpisode(childKey, function(obj) {
             if(obj != null) {
               if(obj.airdate.length === 0) {
                 //sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' but the air date is TBA. ⏰'); 
