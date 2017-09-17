@@ -372,7 +372,7 @@ function summary(senderID, name) {
 function cast(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-      request({json: true, url: 'http://api.tvmaze.com/shows/' + show_callback.id}, function(e, r, body) {
+      request({json: true, url: 'http://api.tvmaze.com/shows/' + show_callback.id + '/cast'}, function(e, r, body) {
         if(!e) {
           body.forEach(function(element) {
             sendTextMessage(senderID, element.person.name);
