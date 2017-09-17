@@ -306,8 +306,6 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       }else sendTextMessage(senderID, aiText);
     });
 
-    notifications();
-
     request.on('error', (error) => {
       console.log(error);
     });
@@ -1112,5 +1110,5 @@ app.listen(app.get('port'), function() {
 module.exports = app;
 
 module.exports.notification = function() {
-  subscribe(1632287543479536, 'pingu');
+  notifications();
 };
