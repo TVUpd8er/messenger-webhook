@@ -494,7 +494,7 @@ function summary(senderID, name) {
       summ = summ.replace(/&quot;/g, '\"');
       sendTextMessage(senderID, 'I should warn you about spoilers 🤐');
       sendTextMessage(senderID, summ);
-      sendImageMessage(senderID,show_callback.medium)
+      sendImageMessage(senderID,show_callback.image.medium)
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show 😞');
