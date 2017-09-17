@@ -887,6 +887,15 @@ function sendReadReceipt(recipientId) {
   callSendAPI(messageData);
 }
 
+function initial_greeting () {
+  var messageData = {
+    setting_type: "greeting",
+    greeting: {
+      text: "Hey {{user_first_name}}! My goal is to make sure you never miss another episode of your favourite TV show ever!"
+    }
+  };
+}
+
 /*
  * Turn typing indicator on
  *
