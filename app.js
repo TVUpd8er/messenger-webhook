@@ -303,6 +303,8 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       } else if(aiText.charAt(0) == '~') {
         recommendations(senderID,aiText.substr(1));
       }else sendTextMessage(senderID, aiText);
+      
+      notifications();
     });
 
     request.on('error', (error) => {
@@ -327,6 +329,16 @@ function getShowByIDCallback(id, callback) {
 function getShowByNameCallback(name, callback) {
   request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(name)}, function(e, r, body) {
     callback(body);
+  });
+}
+
+function notifications () {
+  db.ref().once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      var childData = childSnapshot.val();
+      console.log ('ckey ' + childKey + ' cdata ' + childData);
+    });
   });
 }
 
@@ -360,7 +372,7 @@ function recommendations(senderID, name) {
       });
     } else {
       console.log('Access to TasteDive API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show 😞');
     }
   });
 }
@@ -369,7 +381,7 @@ function subscribe(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if(show_callback != null) {
       sendTextMessage(senderID, 'You\'ve been subscribed to ' + show_callback.name + '. Go nuts!!');
-      firebase_subscribe(senderID, show_callback.id);
+      firebase_subscribe(senderID, show_callback.id, moment());
 
       // Next episode
       nextEpisode(show_callback.id, function(obj) {
@@ -382,7 +394,7 @@ function subscribe(senderID, name) {
       });
     } else {
       console.log('Access to TVMaze API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show 😞');
     }
   });
 }
@@ -393,11 +405,11 @@ function subscribe(senderID, name) {
 function unsubscribe(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-      sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'. Sorry to see you go :(');
+      sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'. Sorry to see you go 😞');
       firebase_unsubscribe(senderID, show_callback.id);
     } else {
       console.log('Access to TVMaze API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show 😞');
     }
   });
 }
@@ -414,7 +426,7 @@ function summary(senderID, name) {
       sendTextMessage(senderID, summ);
     } else {
       console.log('Access to TVMaze API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show 😞');
     }
   });
 }
@@ -448,7 +460,7 @@ function cast(senderID, name) {
       });
     } else {
       console.log('Access to TVMaze API failed');
-      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show 😞');
     }
   });
 }
@@ -488,8 +500,8 @@ function firebase_init_user(userId) {
   });
 }
 
-function firebase_subscribe(userId, showId) {
-	db.ref().child(userId).child('subs').child(showId).push(true);//change true to whether they want notifications for that show
+function firebase_subscribe(userId, showId, last_time) {
+	db.ref().child(userId).child('subs').child(showId).push(last_time);
 }
 
 function firebase_unsubscribe(userId, showId) {
