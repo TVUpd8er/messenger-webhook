@@ -25,8 +25,6 @@ app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
-var idx = 0;
-String msg = '';
 
 // Initialize Firebase
 var fbconfig = {
@@ -377,16 +375,10 @@ function cast(senderID, name) {
       request({json: true, url: 'http://api.tvmaze.com/shows/' + show_callback.id + '/cast'}, function(e, r, body) {
         if(!e) {
           sendTextMessage(senderID, 'Here are the main cast members:')
-          idx = 0;
-          msg = '';
           
           body.forEach(function(element) {
-            if (idx == 5)
-              break;
-            idx++;
-            msg += element.person.name + (idx == 4 ? ' and ' : ', ');
+            sendTextMessage(senderID,element.person.name);
           });
-          sendTextMessage(senderID,msg);
         } else {
           console.log('Access to TVMaze Cast API failed');
           console.log('Access to casts failed.');
