@@ -462,7 +462,7 @@ function nextEpisode(id, callback) {
       body.forEach(function(element) {
         console.log(moment().format('YYYY-MM-DD') + ' ' + element.airdate);
         if(next === null) {
-          if(element.airdate.length != 0 && element.airtime.length != 0 && moment().isSameOrBefore(element.airdate + element.airtime.length) ||
+          if(element.airdate.length != 0 && element.airtime.length != 0 && moment().isSameOrBefore(element.airdate + ' ' + element.airtime.length) ||
               element.airdate.length === 0)
           next = element;
         }
