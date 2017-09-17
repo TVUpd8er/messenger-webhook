@@ -349,7 +349,7 @@ function subscribe(senderID, name) {
 function unsubscribe(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-        sendTextMessage(senderID, 'Unsubscribing from \'' + name + '\'');
+        sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'');
         firebase_unsubscribe(senderID, show_callback.id);
     } else {
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
