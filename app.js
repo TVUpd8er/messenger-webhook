@@ -378,7 +378,7 @@ function cast(senderID, name) {
           var lst = new Array();
           
           body.forEach(function(element) {
-            lst.append(element.person.name);
+            lst.push(element.person.name);
           });
           
           for (var i = 0; i < Math.min (5, lst.length); i++) {
