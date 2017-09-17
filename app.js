@@ -332,21 +332,18 @@ function recommendations(senderID, name) {
   //https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3Amodern%20family
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-      var url = 'https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3A' + encodeURIComponent(name);
+      var url = 'https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3A' + encodeURIComponent(show_callback.name);
       
       request({json: true, url: url}, function(e, r, body) {
         if(!e) {
-          //nama = jef;
-          name = body.Similar.Info[0].Name;
-          sendTextMessage(senderID, 'You like ' + name + '? Here\'s some more just like it:');
+          sendTextMessage(senderID, 'You like ' + show_callback.name + '? Here\'s some more just like it:');
           
           var lst = new Array();
-          console.log(body);
           
           body.Similar.Results.forEach(function(element) {
             lst.push(element.Name);
           });
-                    
+          
           var msg = '';
           
           for (var i = 0; i < Math.min (5, lst.length); i++) {
