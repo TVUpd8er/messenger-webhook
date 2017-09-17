@@ -339,6 +339,7 @@ function recommendations(senderID, name) {
           sendTextMessage(senderID, 'You like \'' + name + '\'? Here\'s some more just like it:');
           
           var lst = new Array();
+          console.log(body);
           
           body.forEach(function(element) {
             lst.push(element.Results.Name);
