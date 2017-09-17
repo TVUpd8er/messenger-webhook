@@ -359,8 +359,8 @@ function notifications () {
                         // last notification was sent before the time to send it, you should prolly send one
                         getShowByNameCallback(name, function(show_callback) {
                           if (show_callback != null) {
-                            String msg = 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' in ' + moment().to(obj.airdate + ' ' + obj.airtime) + ' 😮';
-                            String msg2 = 'The latest episode of ' + show_callback.name + ' aired yesterday. Just making sure you didn\'t forget 😉';
+                            var msg = 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' in ' + moment().to(obj.airdate + ' ' + obj.airtime) + ' 😮';
+                            var msg2 = 'The latest episode of ' + show_callback.name + ' aired yesterday. Just making sure you didn\'t forget 😉';
                             sendTextMessage(childKey, x == 3 ? msg2 : msg);
                             sub_ref.child(childSnapshot2.key).remove();
                             sub_ref.child(childSnapshot2.key).push(moment().format("MMMM Do YYYY, h:mm:ss a"));
