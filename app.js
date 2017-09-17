@@ -460,7 +460,7 @@ function nextEpisode(id, callback) {
       var next = null;
       body.forEach(function(element) {
         console.log(moment().format('YYYY-MM-DD') + ' ' + body.airdate);
-        if(next === null && moment(moment().format('YYYY-MM-DD')).isSameOrAfter(body.airdate)) {
+        if(next === null && moment(moment().format('YYYY-MM-DD')).isSameOrBefore(body.airdate)) {
           next = element;
         }
       });
