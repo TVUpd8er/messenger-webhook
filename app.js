@@ -337,8 +337,7 @@ function notifications () {
     snapshot.forEach(function(childSnapshot) {
       var childKey = childSnapshot.key;
       var sub_ref = db.ref ().child (childKey).child('subs');
-      
-      sub_ref.once('value', function(snapshot))
+      console.log ('check sub_ref: ' + sub_ref + ' val: ' + sub_ref.value);
     });
   });
 }
@@ -502,7 +501,8 @@ function firebase_init_user(userId) {
 }
 
 function firebase_subscribe(userId, showId, last_time) {
-	db.ref().child(userId).child('subs').child(showId).push(last_time);
+	db.ref().child(userId).child('subs').child(showId).remove();
+  db.ref().child(userId).child('subs').child(showId).push(last_time);
 }
 
 function firebase_unsubscribe(userId, showId) {
