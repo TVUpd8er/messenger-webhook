@@ -336,7 +336,7 @@ function recommendations(senderID, name) {
       
       request({json: true, url: url}, function(e, r, body) {
         if(!e) {
-          sendTextMessage(senderID, 'You like ' + show_callback.name + '? Here\'s some more just like it:');
+          sendTextMessage(senderID, 'You like ' + show_callback.name + '? Here\'s some shows just like it:');
           
           var lst = new Array();
           
