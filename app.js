@@ -354,6 +354,7 @@ function notifications () {
                 var exact_airdiff = moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days', true);
                 var notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days');
                 var exact_notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days', true);
+                console.log(obj.id + ": " + airdiff);
 
                 if (airdiff == 7 && notification_diff != 0) {
                   // week before
@@ -430,7 +431,7 @@ function recommendations(senderID, name) {
           }
           var msg2 = lst.length == 0 ? 'There aren\'t any shows like ' + show_callback.name : 'You like ' + show_callback.name + '? Hope you like these ones ✨';
           sendTextMessage(senderID, msg2);
-          
+
           if (lst.length != 0) {
             sendTextMessage(senderID,msg);
           }
