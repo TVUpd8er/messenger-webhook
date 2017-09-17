@@ -360,7 +360,7 @@ function summary(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
         var summ = sanitizeHtml(show_callback.summary, {allowedTags: [], allowedAttributes: []});
-        summ = summ.replace('/&quot;/gi', '\'');
+        summ = summ.replace(/&quot;/g, '\\"');
         sendTextMessage(senderID, 'Summary of \'' + show_callback.name + '\': ' + summ);
     } else {
       console.log('Access to TVMaze API failed');
