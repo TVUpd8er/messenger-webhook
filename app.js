@@ -364,6 +364,29 @@ function summary(senderID, name) {
   });
 }
 
+/* Send the cast list
+*/
+
+function cast(senderID, name) {
+  getShowByNameCallback(name, function(show_callback) {
+    if (show_callback != null) {
+      request({json: true, url: 'http://api.tvmaze.com/shows/' + show_callback.id}, function(e, r, body) {
+        if(!e) {
+          body.forEach(function(element) {
+            sendTextMessage(senderID, element.person.name);
+          });
+        } else {
+          console.log('Access to TVMaze Cast API failed');
+          console.log('Access to casts failed.');
+        }
+      });
+    } else {
+      console.log('Access to TVMaze API failed');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+    }
+  });
+}
+
 function userExistsCallback(userId, exists) {
   if (!exists) {
 	   db.ref().child(userId).set(userId);
