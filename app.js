@@ -291,8 +291,6 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
       if(aiText.length < 0) console.log('Received empty string back!');
       if(aiText.charAt(0) == '+') {
         subscribe(senderID, aiText.substr(1));
-      } else if(aiText.charAt(0) == '+') {
-        subscribe(senderID, aiText.substr(1));
       } else if(aiText.charAt(0) == '-') {
         unsubscribe(senderID, aiText.substr(1));
       } else sendTextMessage(senderID, aiText);
