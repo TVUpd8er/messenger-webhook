@@ -374,16 +374,20 @@ function cast(senderID, name) {
     if (show_callback != null) {
       request({json: true, url: 'http://api.tvmaze.com/shows/' + show_callback.id + '/cast'}, function(e, r, body) {
         if(!e) {
-          sendTextMessage(senderID, 'Here are the main cast members:')
+          //sendTextMessage(senderID, 'Here are the main cast members:')
           var lst = new Array();
           
           body.forEach(function(element) {
             lst.push(element.person.name);
           });
           
+          var msg = '';
+          
           for (var i = 0; i < Math.min (5, lst.length); i++) {
-            sendTextMessage(senderID, lst[i]);
+            msg += lst[i] + (i == Math.min (5, lst.length) - 1 ? ' and ' : ', ');
           }
+          
+          sendTextMessage(senderID,msg);
         } else {
           console.log('Access to TVMaze Cast API failed');
           console.log('Access to casts failed.');
