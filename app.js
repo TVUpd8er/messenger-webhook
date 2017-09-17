@@ -25,6 +25,7 @@ app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
+var idx = 0;
 
 // Initialize Firebase
 var fbconfig = {
@@ -375,14 +376,14 @@ function cast(senderID, name) {
       request({json: true, url: 'http://api.tvmaze.com/shows/' + show_callback.id + '/cast'}, function(e, r, body) {
         if(!e) {
           sendTextMessage(senderID, 'Here are the main cast members:')
-          var i = 0;
+          idx = 0;
           String msg = '';
           
           body.forEach(function(element) {
-            if (i == 5)
+            if (idx == 5)
               break;
-            i++;
-            msg += element.person.name + (i == 4 ? '' : ', ');
+            idx++;
+            msg += element.person.name + (idx == 4 ? ' and ' : ', ');
           });
           sendTextMessage(senderID,msg);
         } else {
