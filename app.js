@@ -494,6 +494,7 @@ function summary(senderID, name) {
       summ = summ.replace(/&quot;/g, '\"');
       sendTextMessage(senderID, 'I should warn you about spoilers 🤐');
       sendTextMessage(senderID, summ);
+      sendImageMessage(senderID,show_callback.medium)
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show 😞');
@@ -675,7 +676,7 @@ function receivedAccountLink(event) {
  * Send an image using the Send API.
  *
  */
-function sendImageMessage(recipientId) {
+function sendImageMessage(recipientId, address) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -684,7 +685,7 @@ function sendImageMessage(recipientId) {
       attachment: {
         type: "image",
         payload: {
-          url: SERVER_URL + "/assets/rift.png"
+          url: address
         }
       }
     }
