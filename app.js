@@ -356,7 +356,7 @@ function notifications () {
                 var exact_notification_diff = -moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days', true);
                 console.log(obj.id + ": " + airdiff);
 
-                if (airdiff == 7 && notification_diff != 0) {
+                if (airdiff < 7 && notification_diff >= 7) {
                   // week before
                   getShowByNameCallback(name, function(show_callback) {
                     if (show_callback != null) {
