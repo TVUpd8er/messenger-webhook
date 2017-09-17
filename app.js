@@ -375,7 +375,7 @@ function subscribe(senderID, name) {
       nextEpisode(show_callback.id, function(obj) {
         if(obj != null) {
           if(obj.airdate.length === 0) sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' but the air date is TBA. ⏰');
-          else sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' and will air in ' + moment().to(obj.airdate + obj.airtime));
+          else sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' and will air in ' + moment().to(obj.airdate + ' ' + obj.airtime));
         } else {
           sendTextMessage(senderID, 'Couldn\'t find the next episode for ' + show_callback.name);
         }
@@ -462,7 +462,7 @@ function nextEpisode(id, callback) {
       body.forEach(function(element) {
         console.log(moment().format('YYYY-MM-DD') + ' ' + element.airdate);
         if(next === null) {
-          if(element.airdate.length != 0 && element.airtime.length != 0 && moment().isSameOrBefore(element.airdate + ' ' + element.airtime.length) ||
+          if(element.airdate.length != 0 && element.airtime.length != 0 && moment().isSameOrBefore(element.airdate + ' ' + element.airtime) ||
               element.airdate.length === 0)
           next = element;
         }
