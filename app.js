@@ -392,7 +392,7 @@ function subscribe(senderID, name) {
 function unsubscribe(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-      sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'. Sorry to see you go :()');
+      sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'. Sorry to see you go :(');
       firebase_unsubscribe(senderID, show_callback.id);
     } else {
       console.log('Access to TVMaze API failed');
@@ -459,7 +459,8 @@ function nextEpisode(id, callback) {
     if(!e && body != null) {
       var next = null;
       body.forEach(function(element) {
-        if(next === null && moment(moment().format('YYYY-MM-DD')).isSameOrBefore(body.air_date)) {
+        console.log(moment().format('YYYY-MM-DD') + ' ' + body.air_date);
+        if(next === null && moment(moment().format('YYYY-MM-DD')).isSameOrAfter(body.air_date)) {
           next = element;
         }
       });
