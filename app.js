@@ -381,7 +381,7 @@ function subscribe(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if(show_callback != null) {
       sendTextMessage(senderID, 'You\'ve been subscribed to ' + show_callback.name + '. Go nuts!!');
-      firebase_subscribe(senderID, show_callback.id, moment().format("MMMM Do YYYY, h:mm:ss a"););
+      firebase_subscribe(senderID, show_callback.id, moment().format("MMMM Do YYYY, h:mm:ss a"));
 
       // Next episode
       nextEpisode(show_callback.id, function(obj) {
