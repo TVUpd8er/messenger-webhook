@@ -335,13 +335,81 @@ function getShowByNameCallback(name, callback) {
 function notifications () {
   db.ref().once('value', function(snapshot) {
     snapshot.forEach(function(childSnapshot) {
+      // for each users subs
       var childKey = childSnapshot.key;
       var sub_ref = db.ref ().child (childKey).child('subs');
-      console.log ('check sub_ref: ' + sub_ref + ' val: ' + sub_ref.value);
+      console.log ('check sub_ref: ' + sub_ref);
+      
+      sub_ref.once('value', function(snapshot2) {
+        snapshot2.forEach(function(childSnapshot2) {
+          // for each users tv shows subbed to
+          // Next episode
+          var last_notification = childSnapshot2.val();
+          nextEpisode(show_callback.id, function(obj) {
+            if(obj != null) {
+              if(obj.airdate.length === 0) {
+                //sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' but the air date is TBA. ⏰'); 
+              }
+              else {
+                var str_diff = moment().to(obj.airdate + ' ' + obj.airtime);
+                var airdiff = moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days');
+                var exact_airdiff = moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days', true);
+                var notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days');
+                var exact_notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days', true);
+                
+                if (airdiff == 7 && notification_diff != 0) {
+                  // week before
+                  getShowByNameCallback(name, function(show_callback) {
+                    if (show_callback != null) {
+                      sendTextMessage(childKey, 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' in ' + str_diff);
+                    } else {
+                      console.log('Access to TasteDive API failed');
+                    }
+                  });
+                }
+                else if (airdiff == 1 && notification_diff != 0) {
+                  // day before
+                  getShowByNameCallback(name, function(show_callback) {
+                    if (show_callback != null) {
+                      sendTextMessage(childKey, 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' in ' + str_diff);
+                    } else {
+                      console.log('Access to TasteDive API failed');
+                    }
+                  });
+                }
+                else if (exact_airdiff < 1 && exact_notification_diff > 1) {
+                  // day of
+                  getShowByNameCallback(name, function(show_callback) {
+                    if (show_callback != null) {
+                      sendTextMessage(childKey, 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' airing today!');
+                    } else {
+                      console.log('Access to TasteDive API failed');
+                    }
+                  });
+                }
+                else if (airdiff == -1 && notification_diff != 0) {
+                  // day after
+                  getShowByNameCallback(name, function(show_callback) {
+                    if (show_callback != null) {
+                      sendTextMessage(childKey, 'The latest episode of ' + show_callback.name + ' aired yesterday. Just making sure you didn\'t forget 😉');
+                    } else {
+                      console.log('Access to TasteDive API failed');
+                    }
+                  });
+                }
+              }
+            }
+            else {
+             // sendTextMessage(senderID, 'Couldn\'t find the next episode for ' + show_callback.name);
+            }
+          });
+        
+        })
+      });
     });
   });
 }
-
+                
 function recommendations(senderID, name) {
   //https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3Amodern%20family
   getShowByNameCallback(name, function(show_callback) {
