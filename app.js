@@ -428,7 +428,7 @@ function recommendations(senderID, name) {
           for (var i = 0; i < Math.min (5, lst.length); i++) {
             msg += lst[i] += (i == (Math.min (5, lst.length) - 2) ? ' and ' : (i == (Math.min (5, lst.length) - 1) ? '' : ', '));
           }
-          var msg2 = lst.length == 0 ? 'There aren\'t any shows like ' + show_callback.name : 'You like ' + show_callback.name + '? Hope you like these ones ✨';
+          var msg2 = lst.length == 0 ? 'There aren\'t any shows like ' + show_callback.name + ' 😳' : 'You like ' + show_callback.name + '? Hope you like these ones ✨';
           sendTextMessage(senderID, msg2);
           
           if (lst.length != 0) {
