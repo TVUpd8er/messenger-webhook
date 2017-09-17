@@ -293,6 +293,8 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
         subscribe(senderID, aiText.substr(1));
       } else if(aiText.charAt(0) == '-') {
         unsubscribe(senderID, aiText.substr(1));
+      } else if(aiText.charAt(0) == '=') {
+        summary(senderID, aiText.substr(1));
       } else sendTextMessage(senderID, aiText);
     });
 
@@ -341,6 +343,20 @@ function unsubscribe(senderID, name) {
     if (show_callback != null) {
         sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'');
         firebase_unsubscribe(senderID, show_callback.id);
+    } else {
+      console.log('Access to TVMaze API failed');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+    }
+  });
+}
+
+/* Send a summary of the episode
+*/
+
+function summary(senderID, name) {
+  getShowByNameCallback(name, function(show_callback) {
+    if (show_callback != null) {
+        sendTextMessage(senderID, 'Summary of \'' + show_callback.name + '\': ' + show_callback.summary);
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
