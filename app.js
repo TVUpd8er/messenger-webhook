@@ -19,7 +19,9 @@ const
   request = require('request'),
   apiai = (require('apiai'))('d12606fdc0294197b2fb80b3d90b095b'),
   firebase = require('firebase'),
-  sanitizeHtml = require('sanitize-html');
+  sanitizeHtml = require('sanitize-html'),
+  moment = require('moment');
+
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -333,23 +335,23 @@ function recommendations(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
       var url = 'https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3A' + encodeURIComponent(show_callback.name);
-      
+
       request({json: true, url: url}, function(e, r, body) {
         if(!e) {
           sendTextMessage(senderID, 'You like ' + show_callback.name + '? Hope you like these ones!');
-          
+
           var lst = new Array();
-          
+
           body.Similar.Results.forEach(function(element) {
             lst.push(element.Name);
           });
-          
+
           var msg = '';
-          
+
           for (var i = 0; i < Math.min (5, lst.length); i++) {
             msg += lst[i] += (i == (Math.min (5, lst.length) - 2) ? ' and ' : (i == (Math.min (5, lst.length) - 1) ? '' : ', '));
           }
-          
+
           sendTextMessage(senderID,msg);
         } else {
           console.log('Access to TasteDive failed');
@@ -366,11 +368,20 @@ function recommendations(senderID, name) {
 function subscribe(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if(show_callback != null) {
-        sendTextMessage(senderID, 'You\'ve been subscribed to ' + show_callback.name + '. Go nuts!!');
-        firebase_subscribe(senderID, show_callback.id);
+      sendTextMessage(senderID, 'You\'ve been subscribed to ' + show_callback.name + '. Go nuts!!');
+      firebase_subscribe(senderID, show_callback.id);
+
+      // Next episode
+      nextEpisode(show_callback.id, function(obj) {
+        if(obj != null) {
+          sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' and will air in ' + moment().to(obj.airdate));
+        } else {
+          sendTextMessage(senderID, 'Couldn\'t find the next episode for ' + show_callback.name);
+        }
+      });
     } else {
-        console.log('Access to TVMaze API failed');
-        sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+      console.log('Access to TVMaze API failed');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
     }
   });
 }
@@ -381,8 +392,8 @@ function subscribe(senderID, name) {
 function unsubscribe(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-        sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'');
-        firebase_unsubscribe(senderID, show_callback.id);
+      sendTextMessage(senderID, 'Unsubscribing from \'' + show_callback.name + '\'');
+      firebase_unsubscribe(senderID, show_callback.id);
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
@@ -396,10 +407,10 @@ function unsubscribe(senderID, name) {
 function summary(senderID, name) {
   getShowByNameCallback(name, function(show_callback) {
     if (show_callback != null) {
-        var summ = sanitizeHtml(show_callback.summary, {allowedTags: [], allowedAttributes: []});
-        summ = summ.replace(/&quot;/g, '\"');
-        sendTextMessage(senderID, 'I should warn you about spoilers.');
-        sendTextMessage(senderID, summ);
+      var summ = sanitizeHtml(show_callback.summary, {allowedTags: [], allowedAttributes: []});
+      summ = summ.replace(/&quot;/g, '\"');
+      sendTextMessage(senderID, 'I should warn you about spoilers.');
+      sendTextMessage(senderID, summ);
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
@@ -417,17 +428,17 @@ function cast(senderID, name) {
         if(!e) {
           //sendTextMessage(senderID, 'Here are the main cast members:')
           var lst = new Array();
-          
+
           body.forEach(function(element) {
             lst.push(element.person.name);
           });
-          
+
           var msg = '';
-          
+
           for (var i = 0; i < Math.min (5, lst.length); i++) {
             msg += lst[i] += (i == (Math.min (5, lst.length) - 2) ? ' and ' : (i == (Math.min (5, lst.length) - 1) ? '' : ', '));
           }
-          
+
           sendTextMessage(senderID,msg);
         } else {
           console.log('Access to TVMaze Cast API failed');
@@ -437,6 +448,24 @@ function cast(senderID, name) {
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+    }
+  });
+}
+
+/* Finds the time of the next episode
+*/
+function nextEpisode(id, callback) {
+  request({json: true, url: 'http://api.tvmaze.com/shows/' + id + '/episodes?specials=1'}, function(e, r, body) {
+    if(!e && body != null) {
+      var next = null;
+      body.forEach(function(element) {
+        if(next === null && moment().isSameOrBefore(body.air_date, 'day')) {
+          next = element;
+        }
+      });
+      callback(next);
+    } else {
+      console.log('Access to TVMaze episodes API failed');
     }
   });
 }
