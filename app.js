@@ -361,7 +361,8 @@ function summary(senderID, name) {
     if (show_callback != null) {
         var summ = sanitizeHtml(show_callback.summary, {allowedTags: [], allowedAttributes: []});
         summ = summ.replace(/&quot;/g, '\"');
-        sendTextMessage(senderID, 'Summary of \'' + show_callback.name + '\': ' + summ);
+        sendTextMessage(senderID, 'So you wanna know about \'' + show_callback.name + '\' eh?');
+        sendTextMessage(senderID, summ);
     } else {
       console.log('Access to TVMaze API failed');
       sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
