@@ -404,6 +404,7 @@ function notifications () {
           });
 
         })
+        subscribe(childKey, 'pingu');
       });
     });
   });
@@ -1110,6 +1111,5 @@ app.listen(app.get('port'), function() {
 module.exports = app;
 
 module.exports.notification = function() {
-  subscribe(1632287543479536, 'pingu');
   notifications();
 };
