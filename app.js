@@ -350,10 +350,10 @@ function notifications () {
               }
               else {
                 var str_diff = moment().to(obj.airdate + ' ' + obj.airtime);
-                var airdiff = moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days');
-                var exact_airdiff = moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days', true);
-                var notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days');
-                var exact_notification_diff = moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days', true);
+                var airdiff = -moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days');
+                var exact_airdiff = -moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days', true);
+                var notification_diff = -moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days');
+                var exact_notification_diff = -moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days', true);
                 console.log(obj.id + ": " + airdiff);
 
                 if (airdiff == 7 && notification_diff != 0) {
