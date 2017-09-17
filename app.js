@@ -337,7 +337,7 @@ function recommendations(senderID, name) {
       request({json: true, url: url}, function(e, r, body) {
         if(!e) {
           //nama = jef;
-          name = body.Similar.Info.Name;
+          name = body.Similar.Info[0].Name;
           sendTextMessage(senderID, 'You like ' + name + '? Here\'s some more just like it:');
           
           var lst = new Array();
