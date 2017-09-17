@@ -378,11 +378,11 @@ function cast(senderID, name) {
           var lst = new Array();
           
           body.forEach(function(element) {
-            list.append(element.person.name);
+            lst.append(element.person.name);
           });
           
-          for (var i = 0; i < Math.min (5, list.length); i++) {
-            sendTextMessage(senderID, list[i]);
+          for (var i = 0; i < Math.min (5, lst.length); i++) {
+            sendTextMessage(senderID, lst[i]);
           }
         } else {
           console.log('Access to TVMaze Cast API failed');
