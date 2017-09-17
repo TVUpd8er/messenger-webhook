@@ -625,8 +625,7 @@ function sendTextMessage(recipientId, messageText) {
     message: {
       text: messageText,
       metadata: "DEVELOPER_DEFINED_METADATA"
-    },
-    sender_action: "typing_on"
+    }
   };
 
   callSendAPI(messageData);
