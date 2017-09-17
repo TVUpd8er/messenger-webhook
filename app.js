@@ -298,7 +298,9 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
         summary(senderID, aiText.substr(1));
       } else if(aiText.charAt(0) == '>') {
         cast(senderID, aiText.substr(1));
-      } else sendTextMessage(senderID, aiText);
+      } else if(aiText.charAt(0) == '~') {
+        recommendations(senderID,aiText.substr(1));
+      }else sendTextMessage(senderID, aiText);
     });
 
     request.on('error', (error) => {
@@ -309,6 +311,13 @@ function processMessage(messageText, senderID, userProfile, messageAttachments) 
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
+}
+
+function shuffle(a) {
+    for (let i = a.length; i; i--) {
+        let j = Math.floor(Math.random() * i);
+        [a[i - 1], a[j]] = [a[j], a[i - 1]];
+    }
 }
 
 /* Subscribes to a show
@@ -323,6 +332,43 @@ function getShowByIDCallback(id, callback) {
 function getShowByNameCallback(name, callback) {
   request({json: true, url: 'http://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(name)}, function(e, r, body) {
     callback(body);
+  });
+}
+
+function recommendations(senderID, name) {
+  //https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3Amodern%20family
+  getShowByNameCallback(name, function(show_callback) {
+    if (show_callback != null) {
+      var url = 'https://tastedive.com/api/similar?k=284343-TVUpd8r-ZCKD529J&limit=20&type=show&q=show%3A' + name.replace('/ /g', '%20');
+      
+      request({json: true, url: url}, function(e, r, body) {
+        if(!e) {
+          sendTextMessage(senderID, 'You like \'' + name + '\'? Here\'s some more just like it:');
+          
+          var lst = new Array();
+          
+          body.forEach(function(element) {
+            lst.push(element.Results.Name);
+          });
+          
+          shuffle(lst);
+          
+          var msg = '';
+          
+          for (var i = 0; i < Math.min (5, lst.length); i++) {
+            msg += lst[i] += (i == (Math.min (5, lst.length) - 2) ? ' and ' : (i == (Math.min (5, lst.length) - 1) ? '' : ', '));
+          }
+          
+          sendTextMessage(senderID,msg);
+        } else {
+          console.log('Access to TasteDive failed');
+          console.log('Access to casts failed.');
+        }
+      });
+    } else {
+      console.log('Access to TasteDive API failed');
+      sendTextMessage(senderID, 'Sorry, I couldn\'t find that show :(');
+    }
   });
 }
 
