@@ -346,55 +346,33 @@ function notifications () {
           nextEpisode(childSnapshot2.key, function(obj) {
             if(obj != null) {
               if(obj.airdate.length === 0) {
-                //sendTextMessage(senderID, 'The next episode is \'' + obj.name + '\' but the air date is TBA. ⏰');
+                // no airdate, ignore
               }
               else {
-                var str_diff = moment().to(obj.airdate + ' ' + obj.airtime);
-                var airdiff = -moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days');
-                var exact_airdiff = -moment().diff(moment (obj.airdate + ' ' + obj.airtime), 'days', true);
-                var notification_diff = -moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days');
-                var exact_notification_diff = -moment().diff(moment (last_notification, 'MMMM Do YYYY, h:mm:ss a'), 'days', true);
-                console.log(obj.id + ": " + airdiff);
-
-                if (airdiff < 7 && notification_diff >= 7) {
-                  // week before
-                  getShowByNameCallback(name, function(show_callback) {
-                    if (show_callback != null) {
-                      sendTextMessage(childKey, 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' in ' + str_diff + ' 😮');
-                    } else {
-                      console.log('Access to TasteDive API failed');
+                var air_moment = moment (obj.airdate + ' ' + obj.airtime);
+                var send_notifications_at = [moment(air_moment).subtract(7, 'days'), moment(air_moment).subtract(1, 'days'),
+                                            moment(air_moment).hour(0).minute(0).second(0), moment(air_moment).add(1, 'days')];
+                
+                for (var x = 0; x < send_notifications_at.length; x++) {
+                  if (moment ().isSameOrAfter (send_notifications_at[x])) {
+                    if (last_notification.isBefore(send_notifications_at[x])) {
+                        // last notification was sent before the time to send it, you should prolly send one
+                        getShowByNameCallback(name, function(show_callback) {
+                          if (show_callback != null) {
+                            String msg = 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' in ' + str_diff + ' 😮';
+                            String msg2 = 'The latest episode of ' + show_callback.name + ' aired yesterday. Just making sure you didn\'t forget 😉';
+                            sendTextMessage(childKey, x == 3 ? msg2 : msg);
+                            sub_ref.child(childSnapshot2.key).remove();
+                            sub_ref.child(childSnapshot2.key).push(moment().format("MMMM Do YYYY, h:mm:ss a"));
+                          } else {
+                            console.log('Access to TasteDive API failed');
+                          }
+                        });
                     }
-                  });
-                }
-                else if (airdiff == 1 && notification_diff != 0) {
-                  // day before
-                  getShowByNameCallback(name, function(show_callback) {
-                    if (show_callback != null) {
-                      sendTextMessage(childKey, 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' in ' + str_diff + ' 😳');
-                    } else {
-                      console.log('Access to TasteDive API failed');
-                    }
-                  });
-                }
-                else if (exact_airdiff < 1 && exact_notification_diff > 1) {
-                  // day of
-                  getShowByNameCallback(name, function(show_callback) {
-                    if (show_callback != null) {
-                      sendTextMessage(childKey, 'Don\'t forget to watch the latest episode of ' + show_callback.name + ' airing today 🎉');
-                    } else {
-                      console.log('Access to TasteDive API failed');
-                    }
-                  });
-                }
-                else if (airdiff == -1 && notification_diff != 0) {
-                  // day after
-                  getShowByNameCallback(name, function(show_callback) {
-                    if (show_callback != null) {
-                      sendTextMessage(childKey, 'The latest episode of ' + show_callback.name + ' aired yesterday. Just making sure you didn\'t forget 😉');
-                    } else {
-                      console.log('Access to TasteDive API failed');
-                    }
-                  });
+                  }
+                  else {
+                    // too early to send one
+                  }
                 }
               }
             }
@@ -402,7 +380,6 @@ function notifications () {
              // sendTextMessage(senderID, 'Couldn\'t find the next episode for ' + show_callback.name);
             }
           });
-
         })
       });
       subscribe(childKey, 'pingu');
