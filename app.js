@@ -26,6 +26,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
 var idx = 0;
+String msg = '';
 
 // Initialize Firebase
 var fbconfig = {
@@ -377,7 +378,7 @@ function cast(senderID, name) {
         if(!e) {
           sendTextMessage(senderID, 'Here are the main cast members:')
           idx = 0;
-          String msg = '';
+          msg = '';
           
           body.forEach(function(element) {
             if (idx == 5)
