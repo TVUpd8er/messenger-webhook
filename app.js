@@ -383,7 +383,6 @@ function notifications () {
           });
         })
       });
-      subscribe(childKey, 'pingu');
     });
   });
 }
