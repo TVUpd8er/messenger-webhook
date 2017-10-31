@@ -1,4 +1,10 @@
-# messenger-webhook
+# TV Upd8er Messenger Webhook
+
+Technologies
+ - Node.js
+ - Firebase
+ - dialogflow
+ - TVMaze
 
 A Facebook Messenger bot that keeps you up to date on all your TV shows by reminding you when a new episode airs. Allows you to subscribe to your favourite shows, learn information about the show, and can even recommend you new shows based on the shows you love.
 
