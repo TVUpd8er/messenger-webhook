@@ -88,6 +88,5 @@ http://m.me/tvupd8er
 200 Columbia St West
 Waterloo, Ontario N2L 3G1
 Canada
-justinpu@rocketmail.com
 
 Last Edited on 2018-03-14
